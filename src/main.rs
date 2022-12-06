@@ -25,11 +25,10 @@ struct Archive {
     blocks: Vec<[u8; 512]>,
 }
 
-// impl Archive {
-//     fn from_file(file: &str) -> () {
-//         let content = fs::read(file).unwrap().chunks(512).collect::<Vec<_>>();
-//     }
-// }
+struct Entry {
+    block: [u8; 512]
+}
+
 
 fn main() {
     let tarball = fs::read("smol.tar").unwrap();
@@ -37,7 +36,8 @@ fn main() {
     println!("{:?}", entries);
     let first_file = entries[0];
     println!("File name: {}", std::str::from_utf8(&first_file[0..99]).unwrap().replace("\0", ""));
-    println!("File size: {:#o}", std::str::from_utf8(&first_file[124..135]).unwrap().replace("\0", "").parse::<i32>().unwrap());
+    println!("File mode: {}", std::str::from_utf8(&first_file[100..107]).unwrap().replace("\0", ""));
+    println!("File size: {}", std::str::from_utf8(&first_file[124..135]).unwrap().replace("\0", "").parse::<i32>().unwrap());
 
     println!("Hello, world!");
 }
